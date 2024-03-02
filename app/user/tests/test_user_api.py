@@ -7,6 +7,7 @@ from rest_framework import status
 CREATE_USER_URL = reverse('user:create')
 TOKEN_URL = reverse('user:token')
 
+
 def create_user(**params):
     return get_user_model().objects.create_user(**params)
 
@@ -57,6 +58,7 @@ class PublicUserApiTests(TestCase):
             ).exists()
         self.assertFalse(user_exists)
 
+
 def test_create_token_for_user(self):
     user_details = {
         'name': 'Test name',
@@ -71,10 +73,11 @@ def test_create_token_for_user(self):
         'password': user_details['password']
     }
 
-    res  = self.client.post(TOKEN_URL, payload)
+    res = self.client.post(TOKEN_URL, payload)
 
     self.assertEqual(res.status_code, status.HTTP_200_OK)
     self.assertIn('token', res.data)
+
 
 def test_token_bad_credentials(self):
 
@@ -91,10 +94,11 @@ def test_token_bad_credentials(self):
         'password': 'badpass'
     }
 
-    res  = self.client.post(TOKEN_URL, payload)
+    res = self.client.post(TOKEN_URL, payload)
 
     self.assertNotIn(res.data, 'token')
     self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 def test_token_blank_password(self):
     user_details = {
@@ -110,13 +114,7 @@ def test_token_blank_password(self):
         'password': ''
     }
 
-    res  = self.client.post(TOKEN_URL, payload)
+    res = self.client.post(TOKEN_URL, payload)
 
     self.assertNotIn(res.data, 'token')
     self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-
-
-
-
-
-
